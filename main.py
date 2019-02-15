@@ -37,6 +37,8 @@ while True:
 	for result in response['updates']:
 		text = result['object']['text']
 		msgid = result['object']['id']
+		if '@fate_rd' in text:
+			text = re.sub('\[club\d*\|@fate_rd\]','@fate_rd',text)
 		text_split = text.split(' ')
 		if text_split[0] in config['names']:
 			active = True
