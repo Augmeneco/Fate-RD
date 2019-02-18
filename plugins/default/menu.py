@@ -12,9 +12,10 @@ while True:
 		if not text.isdigit():
 			apisay('[SE.RA.PH] Ответ должен быть числом',pack['toho'])
 			lastmsgid = msgid
-		if int(text) < len(menu):
+		if int(text) <= len(menu):
 			pack['msgid'] = msgid
 			do_cmd(open('plugins/default/'+menu[int(text)-1]['src'],'r').read(),pack)
+			exit()
 		else:
 			apisay('[SE.RA.PH] Ваш ответ за приделами меню',pack['toho'])
 			lastmsgid = msgid
