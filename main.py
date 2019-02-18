@@ -1,3 +1,4 @@
+#гит_говно
 import requests, json, sqlite3, os, sys, psutil, threading, re, time, random
 sys.path.append('plugins')
 
