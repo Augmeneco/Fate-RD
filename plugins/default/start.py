@@ -44,10 +44,11 @@ servstat = {
 		'hp':servant[2],
 		'atk':servant[4],
 		'class':servant[9].lower(),
-		'npatk':servant[6]
+		'npatk':servant[6],
+		'lvl':1
 	}
 }
 servstat = json.dumps(servstat)
 print(servstat)
-usersdb.cursor().execute('INSERT INTO users VALUES ('+str(pack['userid'])+',"[]",\''+servstat+'\',"[]")')
+usersdb.cursor().execute('INSERT INTO users VALUES ('+str(pack['userid'])+',"{}",\''+servstat+'\',"{}")')
 usersdb.commit()

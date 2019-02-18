@@ -50,5 +50,6 @@ while True:
 			pack['toho'] = toho
 			pack['userid'] = userid
 			pack['msgid'] = msgid
+			lastmsgid = msgid
 			if text_split[1] in cmds:
 				threading.Thread(target=do_cmd,args=(commands[cmds[text_split[1]][1]],pack)).start()
