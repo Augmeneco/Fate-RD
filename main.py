@@ -36,7 +36,7 @@ while True:
 
 	for result in response['updates']:
 		text = result['object']['text']
-		msgid = result['object']['id']
+		msgid = result['object']['conversation_message_id']
 		if '@fate_rd' in text:
 			text = re.sub('\[club\d*\|@fate_rd\]','@fate_rd',text)
 		text_split = text.split(' ')

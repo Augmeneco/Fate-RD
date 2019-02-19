@@ -1,3 +1,6 @@
+if len(sqlite3.connect('data/users.db').cursor().execute('SELECT * FROM users WHERE id='+str(pack['userid'])).fetchall()) == 0:
+	apisay('[SE.RA.PH] У вас нет доступа сюда. Для начала обратитесь в команду "старт"',pack['toho'])
+	exit()
 menu = json.loads(sqlite3.connect('data/game.db').cursor().execute('SELECT * FROM menu').fetchall()[0][0])
 out = '[SE.RA.PH] Выберете действие цифрой:\n'
 for count in range(len(menu)):

@@ -21,7 +21,7 @@ while True:
 					elements = list(inventory.keys())
 					count = 1
 					for element in elements:
-						out += str(count)+') '+element+' | '+str(inventory[element]['count'])+'\n'
+						out += str(count)+') '+element+' | '+str(inventory[element])+'\n'
 						count += 1
 					apisay(out,pack['toho'])
 					exit()

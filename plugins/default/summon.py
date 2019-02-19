@@ -9,7 +9,6 @@ for item in summon:
 apisay(out,pack['toho'])
 
 timer = time.time()
-print(summon)
 while True:
 	if time.time() - timer >= 10:
 		apisay('[SE.RA.PH] Вы отвечали слишком долго',pack['toho'])
@@ -19,12 +18,12 @@ while True:
 			apisay('[SE.RA.PH] Ответ должен быть числом',pack['toho'])
 			lastmsgid = msgid
 		if int(text) <= len(summon):
-			multiplier = json.loads(summon[int(text)-1][1])
-			num = random.randint(0,100)
-			if num in multiplier:
-				servant = sqlite3.connect('data/fate.db').cursor().execute('SELECT * FROM servants WHERE name="'+multiplier[num]+'"').fetchall()[0]
+			event_servants = json.loads(summon[int(text)-1][1])
+			if random.randint(1,10) == 1:
+				servant = sqlite3.connect('data/fate.db').cursor().execute('SELECT * FROM servants WHERE name="'+random.choice(event_servants)+'"').fetchall()[0]
 				myserv = json.loads(usersdb.cursor().execute('SELECT * FROM users WHERE id='+str(pack['userid'])).fetchall()[0][2])
-				out = '[SE.RA.PH] Информация по вашему слуге:\n'+'Имя: '+servant[0]+'\nУрон: '+str(servant[4])+'\nЗдоровье: '+str(servant[2])+'\nКласс: '+servant[9]
+				inventory['Святой Кварц'] = inventory['Святой Кварц']-3
+				out = '[SE.RA.PH] -3 кварца. Ваш баланс: '+str(inventory['Святой Кварц'])+'\n\nИнформация по вашему слуге:\n'+'Имя: '+servant[0]+'\nУрон: '+str(servant[4])+'\nЗдоровье: '+str(servant[2])+'\nКласс: '+servant[9]
 				sendpic('data/servants/'+servant[8],out,pack['toho'])
 				myserv[servant[0]] = {
 							'hp':servant[2],
@@ -34,6 +33,8 @@ while True:
 							'lvl':1
 						}
 				myserv = json.dumps(myserv)
+				inventory = json.dumps(inventory)
+				usersdb.cursor().execute('UPDATE users SET inventory=\''+inventory+'\' WHERE id='+str(pack['userid'])).fetchall()
 				usersdb.cursor().execute('UPDATE users SET servants=\''+myserv+'\' WHERE id='+str(pack['userid'])).fetchall()
 				usersdb.commit()
 				exit()
@@ -41,7 +42,8 @@ while True:
 				servant = sqlite3.connect('data/fate.db').cursor().execute('SELECT * FROM servants').fetchall()
 				servant = servant[random.randint(0,len(servant)-1)]
 				myserv = json.loads(usersdb.cursor().execute('SELECT * FROM users WHERE id='+str(pack['userid'])).fetchall()[0][2])
-				out = '[SE.RA.PH] Информация по вашему слуге:\n'+'Имя: '+servant[0]+'\nУрон: '+str(servant[4])+'\nЗдоровье: '+str(servant[2])+'\nКласс: '+servant[9]
+				inventory['Святой Кварц'] = inventory['Святой Кварц']-3
+				out = '[SE.RA.PH] -3 кварца. Ваш баланс: '+str(inventory['Святой Кварц'])+'\n\nИнформация по вашему слуге:\n'+'Имя: '+servant[0]+'\nУрон: '+str(servant[4])+'\nЗдоровье: '+str(servant[2])+'\nКласс: '+servant[9]
 				sendpic('data/servants/'+servant[8],out,pack['toho'])
 				myserv[servant[0]] = {
 							'hp':servant[2],
@@ -51,6 +53,8 @@ while True:
 							'lvl':1
 						}
 				myserv = json.dumps(myserv)
+				inventory = json.dumps(inventory)
 				usersdb.cursor().execute('UPDATE users SET servants=\''+myserv+'\' WHERE id='+str(pack['userid'])).fetchall()
+				usersdb.cursor().execute('UPDATE users SET inventory=\''+inventory+'\' WHERE id='+str(pack['userid'])).fetchall()
 				usersdb.commit()
 				exit()
