@@ -2,7 +2,11 @@ inventory = json.loads(sqlite3.connect('data/users.db').cursor().execute('SELECT
 usersdb = sqlite3.connect('data/users.db')
 summon = sqlite3.connect('data/game.db').cursor().execute('SELECT * FROM summon').fetchall()
 count = 1
-out = 'Святого кварца: '+str(inventory['Святой Кварц'])+'\n\n'
+try:
+	out = 'Святого кварца: '+str(inventory['Святой Кварц'])+'\n\n'
+except KeyError:
+	out = 'Святого кварца: 0\n\n'
+	inventory['Святой Кварц'] = 0
 for item in summon:
 	out += str(count)+') '+summon[count-1][0]+'\n'
 	count += 1
@@ -18,6 +22,9 @@ while True:
 			apisay('[SE.RA.PH] Ответ должен быть числом',pack['toho'])
 			lastmsgid = msgid
 		if int(text) <= len(summon):
+			if inventory['Святой Кварц'] < 3:
+				apisay('[SE.RA.PH] У вас слишком мало кварца. Надо как минимум 3.',pack['toho'])
+				exit()
 			event_servants = json.loads(summon[int(text)-1][1])
 			if random.randint(1,10) == 1:
 				servant = sqlite3.connect('data/fate.db').cursor().execute('SELECT * FROM servants WHERE name="'+random.choice(event_servants)+'"').fetchall()[0]
