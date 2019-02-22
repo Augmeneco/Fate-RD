@@ -29,13 +29,13 @@ while True:
 					apisay('[SE.RA.PH] Ваш инвентарь пуст',pack['toho'])
 					exit()
 			if text == '2':
-				out = 'Имя | Атака | Здоровье | Лвл\n'
+				out = 'Имя | Атака | Здоровье | Лвл | Редкость\n'
 				inventory = json.loads(sqlite3.connect('data/users.db').cursor().execute('SELECT * FROM users WHERE id='+str(pack['userid'])).fetchall()[0][2])
 				if len(inventory) > 0:
 					elements = list(inventory.keys())
 					count = 1
 					for element in elements:
-						out += str(count)+') '+element+' | '+str(inventory[element]['atk'])+' | '+str(inventory[element]['hp'])+' | '+str(inventory[element]['lvl'])+'\n'
+						out += str(count)+') '+element+' | '+str(inventory[element]['atk'])+' | '+str(inventory[element]['hp'])+' | '+str(inventory[element]['lvl'])+' | '+'★ '*inventory[element]['stars']+'\n'
 						count += 1
 					apisay(out,pack['toho'])
 					exit()

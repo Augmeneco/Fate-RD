@@ -37,7 +37,7 @@ servant = cursor.execute('SELECT * FROM servants').fetchall()
 import random
 random.seed(sum([ord(x) for x in catalyzer]))
 servant = servant[random.randint(0,len(servant)-1)]
-out = '[SE.RA.PH] Информация по вашему слуге:\n'+'Имя: '+servant[0]+'\nУрон: '+str(servant[4])+'\nЗдоровье: '+str(servant[2])+'\nКласс: '+servant[9]
+out = '[SE.RA.PH] Информация по вашему слуге:\n'+'Имя: '+servant[0]+'\nРедкость: '+'★ '*servant[10]+'\nУрон: '+str(servant[4])+'\nЗдоровье: '+str(servant[2])+'\nКласс: '+servant[9]
 sendpic('data/servants/'+servant[8],out,pack['toho'])
 apisay('[SE.RA.PH] Для продолжения обращайтесь в команду "меню"',pack['toho'])
 servstat = {
@@ -46,6 +46,7 @@ servstat = {
 		'atk':servant[4],
 		'class':servant[9].lower(),
 		'npatk':servant[6],
+		'stars':servant[10],
 		'lvl':1
 	}
 }
