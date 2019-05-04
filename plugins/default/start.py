@@ -51,5 +51,5 @@ servstat = {
 	}
 }
 servstat = json.dumps(servstat)
-usersdb.cursor().execute('INSERT INTO users VALUES ('+str(pack['userid'])+',"{}",\''+servstat+'\',"{}")')
+usersdb.cursor().execute('INSERT INTO users VALUES ('+str(pack['userid'])+',"{}",\''+servstat+'\',"{}","{}")')
 usersdb.commit()

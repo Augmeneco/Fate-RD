@@ -5,7 +5,6 @@ config = json.loads(open('config/bot.cfg','r').read())
 cmds = json.loads(open('config/cmds.cfg','r').read())
 commands = {}
 token = json.loads(open('config/bot.cfg','r').read())['group_token']
-
 def apisay(text,toho):
 	return requests.post('https://api.vk.com/method/messages.send',data={'access_token':token,'v':'5.80','peer_id':toho,'message':text})
 def sendpic(pic,mess,toho):
@@ -22,6 +21,7 @@ for path in os.listdir('plugins'):
 		for plugin in os.listdir('plugins/'+path):
 			commands[plugin] = open('plugins/'+path+'/'+plugin,'r').read()
 			
+
 while True:
 	active = False
 	try:

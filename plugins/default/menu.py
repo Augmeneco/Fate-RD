@@ -2,6 +2,20 @@ if len(sqlite3.connect('data/users.db').cursor().execute('SELECT * FROM users WH
 	apisay('[SE.RA.PH] У вас нет доступа сюда. Для начала обратитесь в команду "старт"',pack['toho'])
 	exit()
 menu = json.loads(sqlite3.connect('data/game.db').cursor().execute('SELECT * FROM menu').fetchall()[0][0])
+if len(pack['text'].split(' ')) > 2:
+	menu_num = pack['text'].split(' ')[2]
+	if menu_num.isdigit(): menu_num = int(menu_num)
+	else: 
+		apisay('Аргумент меню должен быть цифрой',pack['toho'])
+		exit()
+	if menu_num <= len(menu):
+		pack['msgid'] = msgid
+		do_cmd(open('plugins/default/'+menu[menu_num-1]['src'],'r').read(),pack)
+		exit()
+	else:
+		apisay('[SE.RA.PH] Ваш ответ за приделами меню',pack['toho'])
+		lastmsgid = msgid
+		exit()
 out = '[SE.RA.PH] Выберете действие цифрой:\n'
 for count in range(len(menu)):
 	out += str(count+1)+' - '+menu[count]['title']+'\n'
