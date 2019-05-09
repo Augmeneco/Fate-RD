@@ -21,6 +21,7 @@ while True:
 			lastmsgid = msgid
 			pack = pack
 			pack['battle_info'] = battle
+			pack['msgid'] = lastmsgid
 			do_cmd(commands['battle.py'],pack)
 			exit()
 		else:
