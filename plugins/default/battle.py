@@ -1,9 +1,9 @@
 battle_info = pack['battle_info']
 lastmsgid = pack['msgid']
 
-if pack['toho'] != "NULL": apisay(battle_info['text'],pack['toho'])
+if pack['toho'] != "NULL": apisay(battle_info['text']+'<br>―――――――――――――――――――――――――――――――――',pack['toho'])
 enemies = battle_info['level']
-servant_stat = [100,1005] #atk, hp 
+servant_stat = [1000,1005] #atk, hp 
 
 #ТУ ХЕРНЮ ВЫШЕ НАДО ИСПРАВИТЬ БРАВ ЭТИ ДАННЫЕ ИЗ БД
 
@@ -17,12 +17,14 @@ for enemy in enemies:
 	while True:
 		out = ''
 		if user_dead:
-			apisay('К сожалению ваш слуга погиб, вы его теряете навсегда',pack['toho'])
+			apisay('―――――――――――――――――――――――――――――――――<br>К сожалению ваш слуга погиб, вы его теряете навсегда',pack['toho'])
 			#УДАЛЕНИЕ СЛУГИ
 			exit()
 		if enemy_dead:
 			if len(enemies) > 1:
-				apisay('побежден, переход к следующему врагу',pack['toho'])
+				if enemycount != len(enemies):
+					apisay('Побежден, переход к следующему врагу<br>―――――――――――――――――――――――――――――――――',pack['toho'])
+					enemycount += 1
 				break
 			else:
 				apisay(enemy['name']+' побежден',pack['toho'])
@@ -39,7 +41,7 @@ for enemy in enemies:
 			out += 'Известные действия врага:\n'
 			for action in actions:
 				knownrandom = random.randint(1,100)
-				if knownrandom <= 50:
+				if knownrandom <= 60:
 					out += '|'+act_list[action]+'|'
 				else:
 					out += '|????|'
@@ -49,7 +51,7 @@ for enemy in enemies:
 			move = 0
 			timer = time.time()
 			while True:
-				if time.time() - timer >= 40:
+				if time.time() - timer >= 60:
 					apisay('[SE.RA.PH] Вы отвечали слишком долго',pack['toho'])
 					exit()
 				if msgid != lastmsgid:
@@ -73,18 +75,16 @@ for enemy in enemies:
 							
 						servant_stat[1] = servant_stat[1] - enemy_damage
 						enemy_hp = enemy_hp - user_damage
-						if enemy_hp <= 0:
+						if enemy_hp < 0:
 							enemy_hp = 0
 							enemy_dead = True
-							break
-							
-						if servant_stat[1] <= 0:
+						if servant_stat[1] < 0:
 							servant_stat[1] = 0
 							user_dead = True
-							break
 							
 						out = '[SE.RA.PH] %Сервант_нейм% наносит '+enemy['name']+' '+str(user_damage)+' урона\n'+enemy['name']+' наносит %Сервант_нейм% '+str(enemy_damage)+' урона\n\n'+'%Сервант нейм% Здоровье = '+str(servant_stat[1])+'\n'+enemy['name']+' Здоровье = '+str(enemy_hp)
 						apisay(out,pack['toho'])
+						
 						break
 					elif 'помощь' not in pack['text']:
 						apisay('Не правильно введен ответ. Для помощи используй: '+config['names'][0]+' помощь',pack['toho'])
