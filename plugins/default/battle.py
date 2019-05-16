@@ -3,7 +3,8 @@ lastmsgid = pack['msgid']
 
 if pack['toho'] != "NULL": apisay(battle_info['text']+'<br>―――――――――――――――――――――――――――――――――',pack['toho'])
 enemies = battle_info['level']
-servant_stat = [1000,1005] #atk, hp 
+
+servant_stat = [pack['servant_stat']['atk'],pack['servant_stat']['hp']]
 
 #ТУ ХЕРНЮ ВЫШЕ НАДО ИСПРАВИТЬ БРАВ ЭТИ ДАННЫЕ ИЗ БД
 
@@ -82,7 +83,7 @@ for enemy in enemies:
 							servant_stat[1] = 0
 							user_dead = True
 							
-						out = '[SE.RA.PH] %Сервант_нейм% наносит '+enemy['name']+' '+str(user_damage)+' урона\n'+enemy['name']+' наносит %Сервант_нейм% '+str(enemy_damage)+' урона\n\n'+'%Сервант нейм% Здоровье = '+str(servant_stat[1])+'\n'+enemy['name']+' Здоровье = '+str(enemy_hp)
+						out = '[SE.RA.PH] '+pack['servant_stat']+' наносит '+enemy['name']+' '+str(user_damage)+' урона\n'+enemy['name']+' наносит %Сервант_нейм% '+str(enemy_damage)+' урона\n\n'+'%Сервант нейм% Здоровье = '+str(servant_stat[1])+'\n'+enemy['name']+' Здоровье = '+str(enemy_hp)
 						apisay(out,pack['toho'])
 						
 						break

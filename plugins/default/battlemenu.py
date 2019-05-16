@@ -48,6 +48,7 @@ while True:
 						lastmsgid = msgid
 						continue	
 					if int(text) <= count and int(text) > 0:
+						inventory[list(inventory.keys())[int(text)-1]]['name'] = list(inventory.keys())
 						pack['servant_stat'] = inventory[list(inventory.keys())[int(text)-1]]
 						do_cmd(commands['battle.py'],pack)
 			exit()
