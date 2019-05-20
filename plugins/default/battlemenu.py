@@ -25,7 +25,7 @@ while True:
 			out = 'Выберите слугу для боя: <br>'
 			out += 'Имя | Атака | Здоровье | Лвл | Редкость\n'
 			inventory = json.loads(sqlite3.connect('data/users.db').cursor().execute('SELECT * FROM users WHERE id='+str(pack['userid'])).fetchall()[0][2])
-			print(inventory)
+			#print(inventory)
 			if len(inventory) > 0:
 				elements = list(inventory.keys())
 				count = 1
@@ -48,8 +48,11 @@ while True:
 						lastmsgid = msgid
 						continue	
 					if int(text) <= count and int(text) > 0:
-						inventory[list(inventory.keys())[int(text)-1]]['name'] = list(inventory.keys())
+						inventory[list(inventory.keys())[int(text)-1]]['name'] = list(inventory.keys())[0]
 						pack['servant_stat'] = inventory[list(inventory.keys())[int(text)-1]]
+						#print(pack['servant_stat'])
+						#exit()
+						pack['msgid'] = msgid
 						do_cmd(commands['battle.py'],pack)
 			exit()
 		else:

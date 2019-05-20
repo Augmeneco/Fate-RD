@@ -18,7 +18,7 @@ for enemy in enemies:
 	while True:
 		out = ''
 		if user_dead:
-			apisay('―――――――――――――――――――――――――――――――――<br>К сожалению ваш слуга погиб, вы его теряете навсегда',pack['toho'])
+			apisay('―――――――――――――――――――――――――――――――――<br>К сожалению ваш слуга '+pack['servant_stat']['name']+' погиб, вы его теряете навсегда',pack['toho'])
 			#УДАЛЕНИЕ СЛУГИ
 			exit()
 		if enemy_dead:
@@ -83,7 +83,7 @@ for enemy in enemies:
 							servant_stat[1] = 0
 							user_dead = True
 							
-						out = '[SE.RA.PH] '+pack['servant_stat']+' наносит '+enemy['name']+' '+str(user_damage)+' урона\n'+enemy['name']+' наносит %Сервант_нейм% '+str(enemy_damage)+' урона\n\n'+'%Сервант нейм% Здоровье = '+str(servant_stat[1])+'\n'+enemy['name']+' Здоровье = '+str(enemy_hp)
+						out = '[SE.RA.PH] '+pack['servant_stat']['name']+' наносит '+enemy['name']+' '+str(user_damage)+' урона\n'+enemy['name']+' наносит '+pack['servant_stat']['name']+' '+str(enemy_damage)+' урона\n\n'+pack['servant_stat']['name']+' Здоровье = '+str(servant_stat[1])+'\n'+enemy['name']+' Здоровье = '+str(enemy_hp)
 						apisay(out,pack['toho'])
 						
 						break
