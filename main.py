@@ -36,7 +36,6 @@ while True:
 		continue
 
 	for result in response['updates']:
-		#print(result)
 		text = result['object']['text']
 		payload = None
 		msgid = result['object']['conversation_message_id']
@@ -47,6 +46,15 @@ while True:
 		text_split = text.split(' ')
 		if text_split[0] in config['names']:
 			active = True
+		if payload == '{"command":"start"}':
+			active = True
+			text = '@fate_rd старт'
+			text_split = text.split(' ')
+		if result['object']['peer_id'] < 2000000000:
+			if text_split[0].lower() in cmds:
+				active = True
+				text = '@fate_rd '+text_split[0].lower()
+				text_split = text.split(' ')
 		if active:
 			toho = result['object']['peer_id']
 			userid = result['object']['from_id']

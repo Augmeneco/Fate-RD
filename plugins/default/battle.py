@@ -103,7 +103,7 @@ for item in loot:
 	lootout += loot_name+' - '+str(loot_count)+'\n'
 	try:
 		user_inventory[loot_name] += loot_count
-	except NameError:
+	except (NameError,KeyError):
 		user_inventory[loot_name] = loot_count
 usersdb.cursor().execute('UPDATE users SET inventory=\''+json.dumps(user_inventory)+'\' WHERE id = '+str(pack['userid']))
 usersdb.commit()
