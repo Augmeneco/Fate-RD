@@ -12,20 +12,33 @@ try:
 except KeyError:
 	out = 'Святого кварца: 0\n\n'
 	inventory['Святой Кварц'] = 0
+keyboard = {'one_time': False, 'buttons': [[]]}
 for item in summon:
 	out += str(count)+') '+summon[count-1][0]+'\n'
+	keyboard['buttons'][0].append({'action': {'type': 'text', 'payload': str(count), 'label': summon[count-1][0]}, 'color': 'secondary'})
 	count += 1
-apisay(out,pack['toho'])
+keyboard['buttons'].append([])
+keyboard['buttons'][1].append({'action': {'type': 'text', 'payload': '"back"', 'label': 'Назад'}, 'color': 'negative'})
+keyboard['buttons'][1].append({'action': {'type': 'text', 'payload': '"exit"', 'label': 'Выход'}, 'color': 'negative'})
+apisay(out,pack['toho'],keyboard)
 
 timer = time.time()
+lastmsgid = pack['msgid']
 while True:
 	if time.time() - timer >= 10:
-		apisay('[SE.RA.PH] Вы отвечали слишком долго',pack['toho'])
+		apisay('[SE.RA.PH] Вы отвечали слишком долго',pack['toho'],{"buttons":[],"one_time":True})
 		exit()
-	if msgid != pack['msgid']:
+	if msgid != lastmsgid:
+		if payload == '"exit"': exit()
+		if payload == '"back"': 
+			do_cmd(open('plugins/default/menu.py','r').read(),pack)
+			exit()
+		if payload != None:
+			text = payload
 		if not text.isdigit():
 			apisay('[SE.RA.PH] Ответ должен быть числом',pack['toho'])
 			lastmsgid = msgid
+			continue
 		if int(text) <= len(summon):
 			if inventory['Святой Кварц'] < 3:
 				apisay('[SE.RA.PH] У вас слишком мало кварца. Надо как минимум 3.',pack['toho'])
@@ -83,3 +96,4 @@ while True:
 				usersdb.cursor().execute('UPDATE users SET inventory=\''+inventory+'\' WHERE id='+str(pack['userid'])).fetchall()
 				usersdb.commit()
 				exit()
+	time.sleep(0.1)

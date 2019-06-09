@@ -57,7 +57,9 @@ while True:
 						pack['msgid'] = msgid
 						do_cmd(commands['battle.py'],pack)
 						exit()
+				time.sleep(0.1)
 			exit()
 		else:
 			apisay('[SE.RA.PH] Ваш ответ за приделами меню',pack['toho'])
 			lastmsgid = msgid
+	time.sleep(0.1)

@@ -1,18 +1,31 @@
 menu = ['Предметы','Слуги']
 out = '[SE.RA.PH] Выберете действие цифрой:\n'
+keyboard = {'one_time': False, 'buttons': [[]]}
 for count in range(len(menu)):
 	out += str(count+1)+' - '+menu[count]+'\n'
-apisay(out,pack['toho'])
+	keyboard['buttons'][0].append({'action': {'type': 'text', 'payload': str(count+1), 'label': menu[count]}, 'color': 'secondary'})
+keyboard['buttons'].append([])
+keyboard['buttons'][1].append({'action': {'type': 'text', 'payload': '"back"', 'label': 'Назад'}, 'color': 'negative'})
+keyboard['buttons'][1].append({'action': {'type': 'text', 'payload': '"exit"', 'label': 'Выход'}, 'color': 'negative'})
+apisay(out,pack['toho'],keyboard)
 
 timer = time.time()
+lastmsgid = pack['msgid']
 while True:
 	if time.time() - timer >= 10:
-		apisay('[SE.RA.PH] Вы отвечали слишком долго',pack['toho'])
+		apisay('[SE.RA.PH] Вы отвечали слишком долго',pack['toho'],{"buttons":[],"one_time":True})
 		exit()
-	if msgid != pack['msgid']:
+	if msgid != lastmsgid:
+		if payload == '"exit"': exit()
+		if payload == '"back"': 
+			do_cmd(open('plugins/default/menu.py','r').read(),pack)
+			exit()
+		if payload != None:
+			text = payload
 		if not text.isdigit():
 			apisay('[SE.RA.PH] Ответ должен быть числом',pack['toho'])
 			lastmsgid = msgid
+			continue
 		if int(text) <= len(menu):
 			if text == '1':
 				out = 'Название | Количество\n'
@@ -45,3 +58,4 @@ while True:
 		else:
 			apisay('[SE.RA.PH] Ваш ответ за приделами меню',pack['toho'])
 			lastmsgid = msgid
+	time.sleep(0.1)

@@ -5,14 +5,15 @@ config = json.loads(open('config/bot.cfg','r').read())
 cmds = json.loads(open('config/cmds.cfg','r').read())
 commands = {}
 token = json.loads(open('config/bot.cfg','r').read())['group_token']
-def apisay(text,toho):
-	return requests.post('https://api.vk.com/method/messages.send',data={'access_token':token,'v':'5.80','peer_id':toho,'message':text})
-def sendpic(pic,mess,toho):
+def apisay(text,toho,keyboard={"buttons":[],"one_time":True}):
+	return requests.post('https://api.vk.com/method/messages.send',data={'access_token':token,'v':'5.80','peer_id':toho,'message':text,'keyboard':json.dumps(keyboard,ensure_ascii=False)}).json()
+def sendpic(pic,mess,toho,keyboard={"buttons":[],"one_time":True}):
 	ret = requests.get('https://api.vk.com/method/photos.getMessagesUploadServer?access_token={access_token}&v=5.68'.format(access_token=token)).json()
 	with open(pic, 'rb') as f:
 		ret = requests.post(ret['response']['upload_url'],files={'file1': f}).json()
 	ret = requests.get('https://api.vk.com/method/photos.saveMessagesPhoto?v=5.68&album_id=-3&server='+str(ret['server'])+'&photo='+ret['photo']+'&hash='+str(ret['hash'])+'&access_token='+token).json()
-	requests.get('https://api.vk.com/method/messages.send?attachment=photo'+str(ret['response'][0]['owner_id'])+'_'+str(ret['response'][0]['id'])+'&message='+mess+'&v=5.68&peer_id='+str(toho)+'&access_token='+str(token))
+	#requests.get('https://api.vk.com/method/messages.send?attachment=photo'+str(ret['response'][0]['owner_id'])+'_'+str(ret['response'][0]['id'])+'&message='+mess+'&v=5.68&peer_id='+str(toho)+'&access_token='+str(token))
+	requests.post('https://api.vk.com/method/messages.send',data={'attachment':'photo'+str(ret['response'][0]['owner_id'])+'_'+str(ret['response'][0]['id']),'message':mess,'v':'5.68','peer_id':str(toho),'access_token':str(token),'keyboard':json.dumps(keyboard)})
 def do_cmd(code,pack):
 	exec(code)
 
@@ -35,8 +36,12 @@ while True:
 		continue
 
 	for result in response['updates']:
+		#print(result)
 		text = result['object']['text']
+		payload = None
 		msgid = result['object']['conversation_message_id']
+		if 'payload' in result['object']:
+			payload = result['object']['payload']
 		if '@fate_rd' in text:
 			text = re.sub('\[club\d*\|@fate_rd\]','@fate_rd',text)
 		text_split = text.split(' ')
@@ -49,6 +54,7 @@ while True:
 			pack['text'] = text
 			pack['toho'] = toho
 			pack['userid'] = userid
+			pack['payload'] = payload
 			pack['msgid'] = msgid
 			lastmsgid = msgid
 			if text_split[1] in cmds:
