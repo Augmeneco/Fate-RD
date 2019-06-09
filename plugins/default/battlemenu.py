@@ -2,9 +2,11 @@ gamedb = sqlite3.connect('data/game.db')
 battlelist = gamedb.cursor().execute('SELECT * FROM battles').fetchall()
 out = ''
 count = 1
+user_missions = json.loads(sqlite3.connect('data/users.db').cursor().execute('SELECT * FROM users WHERE id='+str(pack['userid'])).fetchall()[0][3])
 for battle in battlelist:
 	battle = json.loads(battle[0])
-	out += str(count)+') '+battle['title']+'\n'
+	if battle['need'] == 'NULL' or battle['need'] in user_missions:
+		out += str(count)+') '+battle['title']+'\n'
 	count += 1
 apisay(out,pack['toho'])
 timer = time.time()
@@ -16,8 +18,8 @@ while True:
 		if not text.isdigit():
 			apisay('[SE.RA.PH] Ответ должен быть числом',pack['toho'])
 			lastmsgid = msgid
-		if int(text) <= len(battlelist[0]):
-			battle = json.loads(battlelist[0][int(text)-1])
+		if int(text) <= len(battlelist):
+			battle = json.loads(battlelist[int(text)-1][0])
 			lastmsgid = msgid
 			pack = pack
 			pack['battle_info'] = battle
@@ -54,6 +56,7 @@ while True:
 						#exit()
 						pack['msgid'] = msgid
 						do_cmd(commands['battle.py'],pack)
+						exit()
 			exit()
 		else:
 			apisay('[SE.RA.PH] Ваш ответ за приделами меню',pack['toho'])

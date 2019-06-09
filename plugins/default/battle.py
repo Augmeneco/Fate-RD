@@ -6,8 +6,6 @@ enemies = battle_info['level']
 
 servant_stat = [pack['servant_stat']['atk'],pack['servant_stat']['hp']]
 
-#ТУ ХЕРНЮ ВЫШЕ НАДО ИСПРАВИТЬ БРАВ ЭТИ ДАННЫЕ ИЗ БД
-
 act_list = {'g':'Guard','a':'Attack','b':'Break'}
 
 move = 0 #0 - you | 1 - enemy
@@ -18,8 +16,7 @@ for enemy in enemies:
 	while True:
 		out = ''
 		if user_dead:
-			apisay('―――――――――――――――――――――――――――――――――<br>К сожалению ваш слуга '+pack['servant_stat']['name']+' погиб, вы его теряете навсегда',pack['toho'])
-			#УДАЛЕНИЕ СЛУГИ
+			apisay('―――――――――――――――――――――――――――――――――\nК сожалению ваш слуга '+pack['servant_stat']['name']+' погиб, вы проиграли.',pack['toho'])
 			exit()
 		if enemy_dead:
 			if len(enemies) > 1:
@@ -91,5 +88,25 @@ for enemy in enemies:
 						apisay('Не правильно введен ответ. Для помощи используй: '+config['names'][0]+' помощь',pack['toho'])
 						lastmsgid = msgid
 						continue
-apisay('Поздравляю, ты победил всех',pack['toho'])
+usersdb = sqlite3.connect('data/users.db')
+usersdb_data = usersdb.execute('SELECT * FROM users WHERE id='+str(pack['userid'])).fetchall()[0]
+user_missions = json.loads(usersdb_data[3])
+user_inventory = json.loads(usersdb_data[1])
+user_missions.append(battle_info['id'])
+usersdb.cursor().execute('UPDATE users SET missions="'+json.dumps(user_missions)+'" WHERE id = '+str(pack['userid']))
+
+loot = battle_info['loot']
+lootout = ''
+for item in loot:
+	loot_name = item[0]
+	loot_count = item[1]
+	lootout += loot_name+' - '+str(loot_count)+'\n'
+	try:
+		user_inventory[loot_name] += loot_count
+	except NameError:
+		user_inventory[loot_name] = loot_count
+usersdb.cursor().execute('UPDATE users SET inventory=\''+json.dumps(user_inventory)+'\' WHERE id = '+str(pack['userid']))
+usersdb.commit()
+
+apisay('―――――――――――――――――――――――――――――――――\nМиссия завершена, вы получаете за выполнение:\n'+lootout,pack['toho'])
 #[{"name":"Скелет","hp":1,"atk":200},{"name":"Скелет","hp":1,"atk":200},{"name":"Скелет","hp":1,"atk":200}]
